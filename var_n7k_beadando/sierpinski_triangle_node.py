@@ -1,47 +1,66 @@
-import turtle
+import rclpy
+from rclpy.node import Node
+from turtlesim.msg import Pose
+from turtlesim.srv import TeleportAbsolute
+from std_srvs.srv import Empty
+import math
 
-def draw_triangle(points, color, t):
-    t.fillcolor(color)
-    t.up()
-    t.goto(points[0])
-    t.down()
-    t.begin_fill()
-    t.goto(points[1])
-    t.goto(points[2])
-    t.goto(points[0])
-    t.end_fill()
+class SierpinskiTriangleNode(Node):
 
-def sierpinski(points, degree, t):
-    colors = ['blue', 'red', 'green', 'yellow', 'purple', 'orange']
-    draw_triangle(points, colors[degree % len(colors)], t)
-    
-    if degree > 0:
-        mid1 = midpoint(points[0], points[1])
-        mid2 = midpoint(points[1], points[2])
-        mid3 = midpoint(points[2], points[0])
+    def __init__(self):
+        super().__init__('sierpinski_triangle_node')
+
+        # Szolgáltatás indítása
+        self.client = self.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
+        while not self.client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('A szolgáltatás nem elérhető, próbálkozom újra...')
         
-        sierpinski([points[0], mid1, mid3], degree - 1, t)
-        sierpinski([mid1, points[1], mid2], degree - 1, t)
-        sierpinski([mid3, mid2, points[2]], degree - 1, t)
+        self.get_logger().info('Szolgáltatás elérhető, indítom a háromszög rajzolását...')
+        
+        # A háromszög rajzolása
+        self.draw_sierpinski_triangle()
 
-def midpoint(p1, p2):
-    return ((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2)
+    def draw_sierpinski_triangle(self):
+        # 3 csúcs koordinátái
+        points = [(2, 2), (8, 8), (2, 8)]
 
-def main():
-    screen = turtle.Screen()
-    screen.bgcolor("white")
-    
-    t = turtle.Turtle()
-    t.speed(0)
-    
-    size = 300
-    initial_points = [(-size, -size / 2), (0, size), (size, -size / 2)]
-    
-    depth = 4
-    sierpinski(initial_points, depth, t)
-    
-    t.hideturtle()
-    screen.mainloop()
+        # Először mozogjunk a kezdőpontba
+        self.teleport_to(2, 2)
 
-if __name__ == "__main__":
+        # Rajzolás
+        self.get_logger().info("Rajzolom a háromszöget...")
+
+        for _ in range(3):  # Három oldal
+            self.move_forward(6.0)
+            self.turn_left(120)
+
+    def teleport_to(self, x, y):
+        # A turtle pozicionálása
+        request = TeleportAbsolute.Request()
+        request.x = x
+        request.y = y
+        request.theta = 0.0
+        self.client.call_async(request)
+
+    def move_forward(self, distance):
+        # Elmozdulás előre
+        self.get_logger().info(f'Mozgás {distance} egységet előre')
+
+    def turn_left(self, angle):
+        # Forgatás balra
+        self.get_logger().info(f'Forgatás {angle} fokkal balra')
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = SierpinskiTriangleNode()
+
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+
+    node.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
     main()
