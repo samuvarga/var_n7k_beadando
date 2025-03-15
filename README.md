@@ -31,4 +31,12 @@ source ~/ros2_ws/install/setup.bash
 ``` r
 ros2 launch var_n7k_beadando archery_target_launch.py
 ```
+## Visualization
 
+### Archery Target Visualization
+
+![Archery Target Visualization](img/ezgif.com-optimize.gif)
+
+### Graph
+
+![Graph](img/graph.png)
