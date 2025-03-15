@@ -32,10 +32,10 @@ class SierpinskiTriangleNode(Node):
             cmd_msg.linear.x = self.side_length  # Haladás előre
             cmd_msg.angular.z = 0.0  # Nincs elforgatás
 
-        # Ha már három oldal el van rajzolva, akkor forgatjuk a teknőst
+        # Ha három oldal el van rajzolva, akkor forgatjuk a teknőst 120 fokkal
         else:
             cmd_msg.linear.x = 0.0  # Ne mozduljon előre
-            cmd_msg.angular.z = 1.0  # 1 rad/s sebességgel forgassuk
+            cmd_msg.angular.z = 1.57  # 120 fokos forgatás (rad)
 
         self.cmd_pub.publish(cmd_msg)
 
