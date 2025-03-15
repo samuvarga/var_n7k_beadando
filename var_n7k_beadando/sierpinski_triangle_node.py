@@ -52,11 +52,10 @@ class MultipleTurtlesNode(Node):
         """Rajzolunk köröket, ha minden teknős spawnolódott"""
         self.get_logger().info('Most kezdjük el a körök rajzolását!')
 
-        # Körök rajzolása közvetlenül
-        self.draw_circle('turtle2', 1.0)  # Kisebb kör
-        self.draw_circle('turtle3', 1.5)  # Közepes kör
-        self.draw_circle('turtle4', 2.0)  # Nagy kör
-        self.draw_circle('turtle5', 2.5)  # Még nagyobb kör
+        # turtle2 nem mozog, de a többiek a turtle2 körül húznak köröket
+        self.draw_circle('turtle3', 1.5)  # Kisebb kör
+        self.draw_circle('turtle4', 3.0)  # Közepes kör
+        self.draw_circle('turtle5', 4.5)  # Nagy kör
 
     def draw_circle(self, turtle_name, radius):
         """Rajzolunk egy kört a megfelelő teknőssel"""
@@ -68,7 +67,7 @@ class MultipleTurtlesNode(Node):
         """A kör rajzolása a teknőssel"""
         turtle_cmd_pub = self.create_publisher(Twist, f'/{turtle_name}/cmd_vel', 10)
 
-        # Kör rajzolása
+        # A kör rajzolása úgy, hogy a középpont turtle2 legyen
         move_cmd = Twist()
         move_cmd.linear.x = 1.0  # A teknős előre mozog
         move_cmd.angular.z = 2 * math.pi / radius  # Kör mozgás kiszámítása math.pi használatával
