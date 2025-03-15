@@ -8,6 +8,8 @@ class MultipleTurtlesNode(Node):
     def __init__(self):
         super().__init__('multiple_turtles_node')
 
+        self.get_logger().info("Node initialized")
+
         # Töröljük a már meglévő turtle1-et
         self.kill_turtle('turtle1')
 
@@ -23,15 +25,15 @@ class MultipleTurtlesNode(Node):
         self.spawn_turtle(5.0, 9.0, 'turtle11')  # Tizenegyedik teknős
 
         # Szín és egyéb tulajdonságok beállítása
-        self.set_turtle_appearance('turtle3', 255, 0, 0)  
-        self.set_turtle_appearance('turtle4', 0, 0, 255)  
-        self.set_turtle_appearance('turtle5', 255, 255, 255) 
-        self.set_turtle_appearance('turtle6', 255, 255, 0) 
-        self.set_turtle_appearance('turtle7', 255, 255, 0)  
-        self.set_turtle_appearance('turtle8', 255, 0, 0)  
-        self.set_turtle_appearance('turtle9', 0, 0, 255) 
-        self.set_turtle_appearance('turtle10', 0, 0, 0) 
-        self.set_turtle_appearance('turtle11', 0, 0, 0) 
+        self.set_turtle_appearance('turtle3', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle4', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle5', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle6', 255, 255, 0)  # Citromsárga
+        self.set_turtle_appearance('turtle7', 255, 255, 0)  # Citromsárga
+        self.set_turtle_appearance('turtle8', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle9', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle10', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle11', 255, 0, 0)  # Piros
 
         # Megvárjuk, amíg mindegyik teknős spawnolódik, és csak utána kezdünk el köröket rajzolni
         self.get_logger().info("Várakozás a teknősök spawnolására...")
@@ -44,6 +46,7 @@ class MultipleTurtlesNode(Node):
 
     def spawn_turtle(self, x, y, name):
         """Technikai funkció a teknős létrehozására"""
+        self.get_logger().info(f"Spawning turtle {name} at ({x}, {y})")
         spawn_client = self.create_client(Spawn, '/spawn')
 
         while not spawn_client.wait_for_service(timeout_sec=1.0):
@@ -59,6 +62,7 @@ class MultipleTurtlesNode(Node):
 
     def kill_turtle(self, name):
         """Technikai funkció egy teknős törlésére"""
+        self.get_logger().info(f"Killing turtle {name}")
         kill_client = self.create_client(Kill, '/kill')
 
         while not kill_client.wait_for_service(timeout_sec=1.0):
@@ -71,6 +75,7 @@ class MultipleTurtlesNode(Node):
 
     def set_turtle_appearance(self, turtle_name, r, g, b):
         """Beállítja a teknős megjelenését (szín, vastagság, stb.)"""
+        self.get_logger().info(f"Setting appearance for {turtle_name} to color ({r}, {g}, {b})")
         set_pen_client = self.create_client(SetPen, f'/{turtle_name}/set_pen')
 
         while not set_pen_client.wait_for_service(timeout_sec=1.0):
@@ -80,7 +85,7 @@ class MultipleTurtlesNode(Node):
         request.r = r  # Piros szín
         request.g = g  # Zöld szín
         request.b = b  # Kék szín
-        request.width = 18  # Vonalvastagság
+        request.width = 2  # Vonalvastagság
         request.off = False  # Rajzolás engedélyezése
 
         set_pen_client.call_async(request)
@@ -102,6 +107,7 @@ class MultipleTurtlesNode(Node):
 
     def move_in_circle(self, turtle_name, radius):
         """A kör rajzolása a teknőssel"""
+        self.get_logger().info(f"Moving {turtle_name} in a circle with radius {radius}")
         turtle_cmd_pub = self.create_publisher(Twist, f'/{turtle_name}/cmd_vel', 10)
 
         # Az angular sebességet úgy kell beállítani, hogy a teknős jobbra forogjon
