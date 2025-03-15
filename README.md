@@ -29,6 +29,6 @@ source ~/ros2_ws/install/setup.bash
 </details>
 
 ``` r
-ros2 launch var_n7k_beadando sierpinski_triangle_launch.py
+ros2 launch var_n7k_beadando archery_target_launch.py
 ```
 
