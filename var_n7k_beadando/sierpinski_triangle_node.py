@@ -20,7 +20,7 @@ class MultipleTurtlesNode(Node):
         self.spawn_turtle(5.0, 7.0, 'turtle8')  # Nyolcadik teknős
         self.spawn_turtle(5.0, 7.5, 'turtle9')  # Kilencedik teknős
         self.spawn_turtle(5.0, 8.5, 'turtle10')  # Tizedik teknős
-        self.spawn_turtle(5.0, 9.0, 'turtle11')  # Tizenegyedik teknős
+        #self.spawn_turtle(5.0, 9.0, 'turtle11')  # Tizenegyedik teknős
 
         # Szín és egyéb tulajdonságok beállítása
         self.set_turtle_appearance('turtle3', 0, 0, 0)  # Piros
@@ -31,7 +31,7 @@ class MultipleTurtlesNode(Node):
         self.set_turtle_appearance('turtle8', 255, 0, 0)  # Piros
         self.set_turtle_appearance('turtle9', 255, 0, 0)  # Piros
         self.set_turtle_appearance('turtle10', 255, 0, 0)  # Piros
-        self.set_turtle_appearance('turtle11', 255, 0, 0)  # Piros
+        #self.set_turtle_appearance('turtle11', 255, 0, 0)  # Piros
 
         # Megvárjuk, amíg mindegyik teknős spawnolódik, és csak utána kezdünk el köröket rajzolni
         self.get_logger().info("Várakozás a teknősök spawnolására...")
@@ -98,7 +98,7 @@ class MultipleTurtlesNode(Node):
         self.move_in_circle('turtle8', 2.0)
         self.move_in_circle('turtle9', 2.5)
         self.move_in_circle('turtle10', 3.5)
-        self.move_in_circle('turtle11', 4.0)
+        #self.move_in_circle('turtle11', 4.0)
 
     def move_in_circle(self, turtle_name, radius):
         """A kör rajzolása a teknőssel"""
