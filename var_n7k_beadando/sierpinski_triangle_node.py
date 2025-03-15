@@ -6,11 +6,10 @@ class MultipleTurtlesNode(Node):
     def __init__(self):
         super().__init__('multiple_turtles_node')
 
-        # 4 teknős létrehozása, mindegyik 2 egységgel magasabb, mint az előző
-        self.spawn_turtle(0.0, 2.0, 'turtle1')  # Első teknős
-        self.spawn_turtle(0.0, 4.0, 'turtle2')  # Második teknős
-        self.spawn_turtle(0.0, 6.0, 'turtle3')  # Harmadik teknős
-        self.spawn_turtle(0.0, 8.0, 'turtle4')  # Negyedik teknős
+        # 4 teknős létrehozása, a középpont (5.544445, 5.544445)-hoz képest 2 egység távolságra
+        self.spawn_turtle(5.544445, 7.544445, 'turtle2')  # Második teknős
+        self.spawn_turtle(5.544445, 9.544445, 'turtle3')  # Harmadik teknős
+        self.spawn_turtle(5.544445, 11.544445, 'turtle4') # Negyedik teknős
 
     def spawn_turtle(self, x, y, name):
         """Technikai funkció a teknős létrehozására"""
