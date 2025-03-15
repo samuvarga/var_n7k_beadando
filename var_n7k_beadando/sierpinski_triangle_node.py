@@ -1,7 +1,6 @@
 import rclpy
 from rclpy.node import Node
 from turtlesim.srv import Spawn, Kill
-from turtlesim.msg import Pose
 from geometry_msgs.msg import Twist
 import math  # A math.pi használatához
 
@@ -18,7 +17,7 @@ class MultipleTurtlesNode(Node):
         self.spawn_turtle(5.0, 8.0, 'turtle4')  # Negyedik teknős
         self.spawn_turtle(5.0, 9.5, 'turtle5')  # Ötödik teknős
 
-        # Hozzáadjuk a körök rajzolását
+        # A körök rajzolása közvetlenül
         self.draw_circle('turtle2', 1.0)  # Kisebb kör
         self.draw_circle('turtle3', 1.5)  # Közepes kör
         self.draw_circle('turtle4', 2.0)  # Nagy kör
@@ -53,15 +52,15 @@ class MultipleTurtlesNode(Node):
 
     def draw_circle(self, turtle_name, radius):
         """Rajzolunk egy kört a megfelelő teknőssel"""
-        # A kör rajzolását timer segítségével indítjuk
+        # Kör rajzolása közvetlenül, timer nélkül
         self.get_logger().info(f'{turtle_name} elindította a kört rajzolását!')
-        self.create_timer(0.5, lambda: self.draw_circle_move(turtle_name, radius))
+        self.move_in_circle(turtle_name, radius)
 
-    def draw_circle_move(self, turtle_name, radius):
-        """Rajzolunk egy kört egy adott turtle-lal"""
+    def move_in_circle(self, turtle_name, radius):
+        """A kör rajzolása a teknőssel"""
         turtle_cmd_pub = self.create_publisher(Twist, f'/{turtle_name}/cmd_vel', 10)
 
-        # Kör rajzolás
+        # Kör rajzolása
         move_cmd = Twist()
         move_cmd.linear.x = 0.0  # Nincs előre mozgás
         move_cmd.angular.z = 2 * math.pi / radius  # Kör mozgás kiszámítása math.pi használatával
@@ -86,8 +85,4 @@ def main(args=None):
     rclpy.init(args=args)
     multiple_turtles_node = MultipleTurtlesNode()
     rclpy.spin(multiple_turtles_node)
-    multiple_turtles_node.destroy_node()
-    rclpy.shutdown()
-
-if __name__ == '__main__':
-    main()
+    multiple_turt
