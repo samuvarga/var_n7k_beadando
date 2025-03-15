@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
+from turtlesim.srv import TeleportAbsolute
 import math
 import time
 
@@ -12,7 +13,7 @@ class SpiderWebNode(Node):
         self.cmd_pub = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
         self.loop_count = 0
         self.sides = [40, 60, 80, 100]  # 4 különböző méretű 8szög
-        self.positions = [(0, 0), (0, 40), (0, 100), (0, 180)]  # teleport pontok
+        self.positions = [(5, 5), (5, 40), (5, 100), (5, 180)]  # teleport pontok
         self.get_logger().info("Spider Web Node with one turtle has been started")
 
     def loop(self):
@@ -26,13 +27,6 @@ class SpiderWebNode(Node):
     def draw_spider_web(self, size, position):
         """Rajzoljon egy nyolcszöget a megadott méretben és pozícióban."""
         # Teleportálás a kezdőpontra
-        cmd_msg = Twist()
-        cmd_msg.linear.x = 0
-        cmd_msg.angular.z = 0
-        self.cmd_pub.publish(cmd_msg)
-        time.sleep(0.5)  # Várjunk, hogy a teleportálás befejeződjön
-
-        # Beállítjuk a pozíciót
         self.teleport_to(position)
 
         # Rajzolás: 8szög
@@ -53,13 +47,18 @@ class SpiderWebNode(Node):
 
     def teleport_to(self, position):
         """A teknőst a megadott pozícióba teleportálja."""
-        cmd_msg = Twist()
-        # X és Y koordinátákhoz tartozó pozícióba teleportálás (mivel TurtleSim 2D-ben működik)
-        cmd_msg.linear.x = position[0]
-        cmd_msg.linear.y = position[1]
-        cmd_msg.angular.z = 0  # Nincs elforgatás
-        self.cmd_pub.publish(cmd_msg)
-        time.sleep(0.5)  # Várjunk egy kicsit, hogy a teleportálás befejeződjön
+        # Teleportálás a turtlesim szolgáltatás segítségével
+        teleport_client = self.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
+        
+        # Várunk, hogy a szolgáltatás elérhetővé váljon
+        while not teleport_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for teleport service...')
+
+        request = TeleportAbsolute.Request()
+        request.x = position[0]
+        request.y = position[1]
+        request.theta = 0.0  # A teknős orientációja
+        teleport_client.call_async(request)
 
 def main(args=None):
     rclpy.init(args=args)
