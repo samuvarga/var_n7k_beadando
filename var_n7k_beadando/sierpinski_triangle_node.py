@@ -23,7 +23,7 @@ class MultipleTurtlesNode(Node):
         self.spawn_turtle(5.0, 9.0, 'turtle11')  # Tizenegyedik teknős
 
         # Szín és egyéb tulajdonságok beállítása
-        self.set_turtle_appearance('turtle3', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle3', 0, 0, 0)  # Piros
         self.set_turtle_appearance('turtle4', 255, 0, 0)  # Piros
         self.set_turtle_appearance('turtle5', 255, 0, 0)  # Piros
         self.set_turtle_appearance('turtle6', 255, 255, 0)  # Citromsárga
