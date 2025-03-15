@@ -10,7 +10,7 @@ def generate_launch_description():
             name='sim'
         ),
         Node(
-            package='sierpinski_triangle',
+            package='var_n7k_beadando',
             executable='sierpinski_triangle.py',
             output='screen'
         ),
