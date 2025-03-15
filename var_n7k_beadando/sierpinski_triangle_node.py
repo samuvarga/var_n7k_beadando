@@ -70,7 +70,7 @@ class MultipleTurtlesNode(Node):
 
         # Kör rajzolása
         move_cmd = Twist()
-        move_cmd.linear.x = 0.0  # Nincs előre mozgás
+        move_cmd.linear.x = 1.0  # A teknős előre mozog
         move_cmd.angular.z = 2 * math.pi / radius  # Kör mozgás kiszámítása math.pi használatával
         turtle_cmd_pub.publish(move_cmd)
 
