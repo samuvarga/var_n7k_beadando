@@ -11,7 +11,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/archery_target_launch.py']),
+        ('share/' + package_name + '/launch', ['launch/sierpinski_triangle_launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -22,7 +22,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'archery_target_node = var_n7k_beadando.archery_target_node:main'
+            'sierpinski_triangle_node = var_n7k_beadando.sierpinski_triangle_node:main'
         ],
     },
 )
