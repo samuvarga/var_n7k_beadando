@@ -80,14 +80,14 @@ class MultipleTurtlesNode(Node):
         request.r = r  # Piros szín
         request.g = g  # Zöld szín
         request.b = b  # Kék szín
-        request.width = 21  # Vonalvastagság
+        request.width = 20  # Vonalvastagság
         request.off = False  # Rajzolás engedélyezése
 
         set_pen_client.call_async(request)
 
     def draw_circles(self):
         """Rajzolunk köröket a többi teknőssel"""
-        self.get_logger().info()#'Most kezdjük el a körök rajzolását!')
+        self.get_logger().info('Most kezdjük el a körök rajzolását!')
 
         # turtle3, turtle4 és turtle5 köröket rajzolnak
         self.move_in_circle('turtle3', 1.5)
