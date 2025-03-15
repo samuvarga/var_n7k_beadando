@@ -3,14 +3,14 @@ from rclpy.node import Node
 from turtlesim.srv import Spawn, Kill
 from turtlesim.msg import Pose
 from geometry_msgs.msg import Twist
-import time  # Hozzáadva a sleep funkcióhoz
+import math  # A math.pi használatához
 
 class MultipleTurtlesNode(Node):
     def __init__(self):
         super().__init__('multiple_turtles_node')
 
         # Töröljük a már meglévő turtle1-et
-        self.kill_turtle('turtle1')  
+        self.kill_turtle('turtle1')
 
         # 4 teknős létrehozása
         self.spawn_turtle(5.0, 5.0, 'turtle2')  # Második teknős
@@ -18,10 +18,11 @@ class MultipleTurtlesNode(Node):
         self.spawn_turtle(5.0, 8.0, 'turtle4')  # Negyedik teknős
         self.spawn_turtle(5.0, 9.5, 'turtle5')  # Ötödik teknős
 
-        # Hozzáadjuk az 8-szög rajzolást a turtle3, turtle4, turtle5 számára
-        self.draw_octagon('turtle3')
-        self.draw_octagon('turtle4')
-        self.draw_octagon('turtle5')
+        # Hozzáadjuk a körök rajzolását
+        self.draw_circle('turtle2', 1.0)  # Kisebb kör
+        self.draw_circle('turtle3', 1.5)  # Közepes kör
+        self.draw_circle('turtle4', 2.0)  # Nagy kör
+        self.draw_circle('turtle5', 2.5)  # Még nagyobb kör
 
     def spawn_turtle(self, x, y, name):
         """Technikai funkció a teknős létrehozására"""
@@ -50,26 +51,24 @@ class MultipleTurtlesNode(Node):
 
         kill_client.call_async(request)
 
-    def draw_octagon(self, turtle_name):
-        """Rajzolunk egy 8-szöget a megfelelő teknőssel"""
+    def draw_circle(self, turtle_name, radius):
+        """Rajzolunk egy kört a megfelelő teknőssel"""
+        # A kör rajzolását timer segítségével indítjuk
+        self.get_logger().info(f'{turtle_name} elindította a kört rajzolását!')
+        self.create_timer(0.5, lambda: self.draw_circle_move(turtle_name, radius))
+
+    def draw_circle_move(self, turtle_name, radius):
+        """Rajzolunk egy kört egy adott turtle-lal"""
         turtle_cmd_pub = self.create_publisher(Twist, f'/{turtle_name}/cmd_vel', 10)
 
-        # Először beállítjuk a turtle pozícióját
-        self.set_position(turtle_name, 5.0, 5.0)  # Kezdő pozíció
+        # Kör rajzolás
+        move_cmd = Twist()
+        move_cmd.linear.x = 0.0  # Nincs előre mozgás
+        move_cmd.angular.z = 2 * math.pi / radius  # Kör mozgás kiszámítása math.pi használatával
+        turtle_cmd_pub.publish(move_cmd)
 
-        # Most indítjuk el az 8-szöget
-        for _ in range(8):  # 8 oldal
-            self.move_forward(turtle_cmd_pub, 2.0)  # Mozgás előre 2.0 m
-            self.turn(turtle_cmd_pub, 45)  # 45 fokos elforgatás
-
-    def set_position(self, turtle_name, x, y):
-        """Beállítjuk a teknős pozícióját a megadott koordinátákra"""
-        # Használhatunk egy szolgáltatást vagy más megoldást a pozíció módosításához,
-        # itt a mozgás függvényeket fogjuk alkalmazni a megadott helyre.
-        # A turtlesim-ben a pozíciót nem lehet közvetlenül állítani, így csak a mozgást használjuk.
-
-        # Pótlólagos várakozás, hogy a pozíciót beállítsuk
-        time.sleep(0.5)
+        # Az egyes köröket több iterációval rajzoljuk
+        self.get_logger().info(f'{turtle_name} körét rajzolja most')
 
     def move_forward(self, cmd_pub, distance):
         """A teknős előre mozgatása a megadott távolságra"""
@@ -77,17 +76,11 @@ class MultipleTurtlesNode(Node):
         move_cmd.linear.x = distance  # Előre mozgatás
         cmd_pub.publish(move_cmd)
 
-        # Várakozás, hogy a teknős befejezze a mozgást
-        time.sleep(1)  # A teknősnek szüksége van egy kis időre, hogy befejezze a mozgást
-
     def turn(self, cmd_pub, angle):
         """A teknős elforgatása a megadott szögben"""
         turn_cmd = Twist()
         turn_cmd.angular.z = float(angle)  # Elforgatás float típusra konvertálva
         cmd_pub.publish(turn_cmd)
-
-        # Várakozás, hogy a teknős befejezze a forgást
-        time.sleep(0.5)  # A teknősnek egy kis időre van szüksége a forgás befejezéséhez
 
 def main(args=None):
     rclpy.init(args=args)
