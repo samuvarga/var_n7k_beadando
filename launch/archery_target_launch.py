@@ -14,10 +14,10 @@ def generate_launch_description():
             executable='archery_target_node',
             output='screen'
         ),
-        Node(
-            package='rqt_graph',
-            executable='rqt_graph',
-            name='rqt_graph',
-            output='screen'
-        ),
+        #Node(
+        #    package='rqt_graph',
+        #    executable='rqt_graph',
+        #    name='rqt_graph',
+        #    output='screen'
+        #),
     ])
