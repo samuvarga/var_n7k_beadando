@@ -80,7 +80,7 @@ class MultipleTurtlesNode(Node):
         request.r = r  # Piros szín
         request.g = g  # Zöld szín
         request.b = b  # Kék szín
-        request.width = 22  # Vonalvastagság
+        request.width = 22.5  # Vonalvastagság
         request.off = False  # Rajzolás engedélyezése
 
         set_pen_client.call_async(request)
