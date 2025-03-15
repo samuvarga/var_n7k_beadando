@@ -3,6 +3,7 @@ from rclpy.node import Node
 from turtlesim.srv import Spawn, Kill
 from turtlesim.msg import Pose
 from geometry_msgs.msg import Twist
+import time  # Hozzáadva a sleep funkcióhoz
 
 class MultipleTurtlesNode(Node):
     def __init__(self):
@@ -65,7 +66,10 @@ class MultipleTurtlesNode(Node):
         """Beállítjuk a teknős pozícióját a megadott koordinátákra"""
         # Használhatunk egy szolgáltatást vagy más megoldást a pozíció módosításához,
         # itt a mozgás függvényeket fogjuk alkalmazni a megadott helyre.
-        pass
+        # A turtlesim-ben a pozíciót nem lehet közvetlenül állítani, így csak a mozgást használjuk.
+
+        # Pótlólagos várakozás, hogy a pozíciót beállítsuk
+        time.sleep(0.5)
 
     def move_forward(self, cmd_pub, distance):
         """A teknős előre mozgatása a megadott távolságra"""
@@ -73,11 +77,17 @@ class MultipleTurtlesNode(Node):
         move_cmd.linear.x = distance  # Előre mozgatás
         cmd_pub.publish(move_cmd)
 
+        # Várakozás, hogy a teknős befejezze a mozgást
+        time.sleep(1)  # A teknősnek szüksége van egy kis időre, hogy befejezze a mozgást
+
     def turn(self, cmd_pub, angle):
         """A teknős elforgatása a megadott szögben"""
         turn_cmd = Twist()
         turn_cmd.angular.z = float(angle)  # Elforgatás float típusra konvertálva
         cmd_pub.publish(turn_cmd)
+
+        # Várakozás, hogy a teknős befejezze a forgást
+        time.sleep(0.5)  # A teknősnek egy kis időre van szüksége a forgás befejezéséhez
 
 def main(args=None):
     rclpy.init(args=args)
