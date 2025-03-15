@@ -26,7 +26,7 @@ ament_target_dependencies(sierpinski_triangle_node rclcpp std_msgs)
 
 # Célok telepítése
 install(TARGETS
-  sierpinski_triangle_node
+  var_n7k_beadando/sierpinski_triangle_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
