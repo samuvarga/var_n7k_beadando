@@ -12,7 +12,7 @@ class MultipleTurtlesNode(Node):
         self.kill_turtle('turtle1')
 
         # 9 teknős létrehozása különböző pontokban
-        self.spawn_turtle(5.0, 6.5, 'turtle3')  # Harmadik teknős
+        self.spawn_turtle(5.0, 6.5, 'turtle3')  # Harmadik teknőss
         self.spawn_turtle(5.0, 8.0, 'turtle4')  # Negyedik teknős
         self.spawn_turtle(5.0, 9.5, 'turtle5')  # Ötödik teknős
         self.spawn_turtle(5.0, 5.5, 'turtle6')  # Hatodik teknős
