@@ -11,27 +11,27 @@ class MultipleTurtlesNode(Node):
         # Töröljük a már meglévő turtle1-et
         self.kill_turtle('turtle1')
 
-        # 3 teknős létrehozása különböző pontokban
+        # 9 teknős létrehozása különböző pontokban
         self.spawn_turtle(5.0, 6.5, 'turtle3')  # Harmadik teknős
         self.spawn_turtle(5.0, 8.0, 'turtle4')  # Negyedik teknős
         self.spawn_turtle(5.0, 9.5, 'turtle5')  # Ötödik teknős
-        self.spawn_turtle(5.0, 5.5, 'turtle6')  # Harmadik teknős
-        self.spawn_turtle(5.0, 6.0, 'turtle7')  # Negyedik teknős
-        self.spawn_turtle(5.0, 7.0, 'turtle8')  # Ötödik teknős
-        self.spawn_turtle(5.0, 7.5, 'turtle9')  # Harmadik teknős
-        self.spawn_turtle(5.0, 8.5, 'turtle10')  # Negyedik teknős
-        self.spawn_turtle(5.0, 9.0, 'turtle11')  # Ötödik teknős
+        self.spawn_turtle(5.0, 5.5, 'turtle6')  # Hatodik teknős
+        self.spawn_turtle(5.0, 6.0, 'turtle7')  # Hetedik teknős
+        self.spawn_turtle(5.0, 7.0, 'turtle8')  # Nyolcadik teknős
+        self.spawn_turtle(5.0, 7.5, 'turtle9')  # Kilencedik teknős
+        self.spawn_turtle(5.0, 8.5, 'turtle10')  # Tizedik teknős
+        self.spawn_turtle(5.0, 9.0, 'turtle11')  # Tizenegyedik teknős
 
         # Szín és egyéb tulajdonságok beállítása
-        self.set_turtle_appearance('turtle3')
-        self.set_turtle_appearance('turtle4')
-        self.set_turtle_appearance('turtle5')
-        self.set_turtle_appearance('turtle6')
-        self.set_turtle_appearance('turtle7')
-        self.set_turtle_appearance('turtle8')
-        self.set_turtle_appearance('turtle9')
-        self.set_turtle_appearance('turtle10')
-        self.set_turtle_appearance('turtle11')
+        self.set_turtle_appearance('turtle3', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle4', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle5', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle6', 255, 255, 0)  # Citromsárga
+        self.set_turtle_appearance('turtle7', 255, 255, 0)  # Citromsárga
+        self.set_turtle_appearance('turtle8', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle9', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle10', 255, 0, 0)  # Piros
+        self.set_turtle_appearance('turtle11', 255, 0, 0)  # Piros
 
         # Megvárjuk, amíg mindegyik teknős spawnolódik, és csak utána kezdünk el köröket rajzolni
         self.get_logger().info("Várakozás a teknősök spawnolására...")
@@ -66,7 +66,7 @@ class MultipleTurtlesNode(Node):
 
         kill_client.call_async(request)
 
-    def set_turtle_appearance(self, turtle_name):
+    def set_turtle_appearance(self, turtle_name, r, g, b):
         """Beállítja a teknős megjelenését (szín, vastagság, stb.)"""
         set_pen_client = self.create_client(SetPen, f'/{turtle_name}/set_pen')
 
@@ -74,9 +74,9 @@ class MultipleTurtlesNode(Node):
             self.get_logger().info(f'Waiting for {turtle_name} set_pen service...')
 
         request = SetPen.Request()
-        request.r = 255  # Piros szín
-        request.g = 0    # Zöld szín
-        request.b = 0    # Kék szín
+        request.r = r  # Piros szín
+        request.g = g  # Zöld szín
+        request.b = b  # Kék szín
         request.width = 2  # Vonalvastagság
         request.off = False  # Rajzolás engedélyezése
 
@@ -96,7 +96,6 @@ class MultipleTurtlesNode(Node):
         self.move_in_circle('turtle9', 2.5)
         self.move_in_circle('turtle10', 3.5)
         self.move_in_circle('turtle11', 4.0)
-        
 
     def move_in_circle(self, turtle_name, radius):
         """A kör rajzolása a teknőssel"""
