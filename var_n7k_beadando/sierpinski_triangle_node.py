@@ -121,7 +121,7 @@ class MultipleTurtlesNode(Node):
     def delete_all_turtles(self):
         """Törli az összes teknőst"""
         self.get_logger().info('Töröljük az összes teknőst!')
-        for i in range(3, 12):
+        for i in range(3, 13):
             self.kill_turtle(f'turtle{i}')
 
 def main(args=None):
