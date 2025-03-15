@@ -1,57 +1,116 @@
-import rclpy
-from rclpy.node import Node
-from geometry_msgs.msg import Twist
-import math
-import time
+#!/usr/bin/env python3.8
+"""
+Code for Turtles class
+Author: Shilpaj Bhalerao
+Date: Sep 03, 2020
+"""
 
-class SpiderWebNode(Node):
+import rospy
+from turtlesim.srv import *
+from std_srvs.srv import Empty
 
-    def __init__(self):
-        super().__init__('spider_web_node')
-        self.timer = self.create_timer(0.2, self.loop)  # 0.2 másodpercenkként
-        self.cmd_pub = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
-        self.cmd_pub2 = self.create_publisher(Twist, '/turtle2/cmd_vel', 10)
-        self.cmd_pub3 = self.create_publisher(Twist, '/turtle3/cmd_vel', 10)
-        self.cmd_pub4 = self.create_publisher(Twist, '/turtle4/cmd_vel', 10)
-        self.loop_count = 0
-        self.sides = [40, 60, 80, 100]  # 4 különböző méretű 8szög
-        self.get_logger().info("Spider Web Node with multiple turtles has been started")
 
-    def loop(self):
-        # Rajzolás logika minden teknőshöz
-        if self.loop_count == 0:
-            # 4 teknős indítása
-            self.draw_spider_web(self.sides[0], self.cmd_pub)  # Első teknős
-            self.draw_spider_web(self.sides[1], self.cmd_pub2)  # Második teknős
-            self.draw_spider_web(self.sides[2], self.cmd_pub3)  # Harmadik teknős
-            self.draw_spider_web(self.sides[3], self.cmd_pub4)  # Negyedik teknős
-            self.loop_count += 1
-        else:
-            self.loop_count += 1
+def reset_sim():
+    """
+    Function to Reset the Simulator
+    """
+    try:
+        reset_serv = rospy.ServiceProxy('/reset', Empty)
+        reset_serv()
+    except rospy.ServiceException as e:
+        rospy.loginfo("Service execution failed: %s" + str(e))
 
-    def draw_spider_web(self, size, cmd_pub):
-        """Rajzoljon egy nyolcszöget a megadott méretben."""
-        for _ in range(8):  # 8 oldalas nyolcszög
-            cmd_msg = Twist()
-            cmd_msg.linear.x = 2.0  # Előre mozgás
-            cmd_msg.angular.z = math.radians(45)  # 45 fokos elforgatás
-            cmd_pub.publish(cmd_msg)
-            time.sleep(0.1)
 
-        # Középpontból húzunk vonalakat a sarkokba
-        for i in range(8):  # 8 vonalat rajzolunk
-            cmd_msg = Twist()
-            cmd_msg.linear.x = size  # A méret határozza meg a vonal hosszát
-            cmd_msg.angular.z = math.radians(45)  # Elforgatás a következő sarokba
-            cmd_pub.publish(cmd_msg)
-            time.sleep(0.1)
+class Turtle:
+    def __init__(self, i):
+        self.name = 'turtle' + str(i)
 
-def main(args=None):
-    rclpy.init(args=args)
-    spider_web_node = SpiderWebNode()
-    rclpy.spin(spider_web_node)
-    spider_web_node.destroy_node()
-    rclpy.shutdown()
+    def __repr__(self):
+        return 'Turtle Name: {}'.format(self.name)
+
+    def get_name(self):
+        return self.name
+
+    def spawn(self, x, y, theta):
+        """
+        Function to spawn turtles in the Turtle-sim
+        :param x: x-position with respect to origin at bottom-left
+        :type x: float
+        :param y: y-position with respect to origin at bottom-left
+        :type y: float
+        :param theta: orientation with respect to x-axis
+        :type theta: float between [0 to 3] OR [0 to -3]
+        """
+        try:
+            serv = rospy.ServiceProxy('/spawn', Spawn)
+            serv(x, y, theta, self.name)
+        except rospy.ServiceException as e:
+            rospy.loginfo("Service execution failed: %s" + str(e))
+
+    def set_pen(self, flag=True):
+        """
+        Function to sketch the turtle movements
+        :param flag: To turn sketching pen - ON[True]/OFF[False]
+        :type flag: bool
+        """
+        try:
+            if not flag:
+                set_serv = rospy.ServiceProxy('/' + self.name + '/set_pen', SetPen)
+                set_serv(0, 0, 0, 0, 1)
+            elif flag:
+                set_serv = rospy.ServiceProxy('/' + self.name + '/set_pen', SetPen)
+                set_serv(255, 255, 255, 2, 0)
+        except rospy.ServiceException as e:
+            rospy.loginfo("Service execution failed: %s" + str(e))
+
+    def teleport(self, x, y, theta):
+        """
+        Function to teleport the turtle
+        :param x: x-position with respect to origin at bottom-left
+        :type x: float
+        :param y: y-position with respect to origin at bottom-left
+        :type y: float
+        :param theta: orientation with respect to x-axis
+        :type theta: float between [0 to 3] OR [0 to -3]
+        """
+        try:
+            serv = rospy.ServiceProxy('/' + self.name + '/teleport_absolute', TeleportAbsolute)
+            serv(x, y, theta)
+        except rospy.ServiceException as e:
+            rospy.loginfo("Service execution failed: %s" + str(e))
+
+    def kill_turtle(self):
+        """
+        Function to remove the turtle from Turtle-sim
+        """
+        try:
+            serv = rospy.ServiceProxy('/kill', Kill)
+            serv(self.name)
+        except rospy.ServiceException as e:
+            rospy.loginfo("Service execution failed: %s" + str(e))
+
 
 if __name__ == '__main__':
-    main()
+    try:
+        # Create a turtle
+        turtle2 = Turtle(2)
+
+        # Spawn the turtle at 3, 3, 0
+        turtle2.spawn(3, 3, 0)
+
+        # Teleport the turtle to 3, 9, 0
+        turtle2.teleport(3, 9, 0)
+
+        # Stop sketching turtle movement
+        turtle2.set_pen(False)
+
+        # Teleport the turtle to 5, 9, 0
+        turtle2.teleport(5, 9, 0)
+
+        # Start sketching turtle movement
+        turtle2.set_pen(True)
+
+        # Teleport the turtle to 9, 9, 0
+        turtle2.teleport(9, 9, 0)
+    except KeyboardInterrupt:
+        exit()
