@@ -23,7 +23,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'archery_target_node = var_n7k_beadando.archery_target_node:main',
+            'sierpinski_triangle_node = var_n7k_beadando.sierpinski_triangle_node:main',
         ],
     },
 )

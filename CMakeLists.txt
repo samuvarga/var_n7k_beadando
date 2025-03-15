@@ -19,19 +19,19 @@ set(ament_dependencies
 include_directories(include)
 
 # Fordítási cél létrehozása (ha van ilyen)
-add_executable(archery_target_node var_n7k_beadando/archery_target_node.py)
+add_executable(sierpinski_triangle_node var_n7k_beadando/sierpinski_triangle_node.py)
 
 # Könyvtárak összekapcsolása
-ament_target_dependencies(archery_target_node rclcpp std_msgs)
+ament_target_dependencies(sierpinski_triangle_node rclcpp std_msgs)
 
 # Célok telepítése
 install(TARGETS
-  archery_target_node
+  sierpinski_triangle_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
 install(PROGRAMS
-  archery_target_node.py 
+  sierpinski_triangle_node.py 
   DESTINATION lib/${PROJECT_NAME}
 )
 
