@@ -26,7 +26,12 @@ ament_target_dependencies(sierpinski_triangle_node rclcpp std_msgs)
 
 # Célok telepítése
 install(TARGETS
-  var_n7k_beadando/sierpinski_triangle_node
+  sierpinski_triangle_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(PROGRAMS
+  ${CMAKE_CURRENT_SOURCE_DIR}/var_n7k_beadando/sierpinski_triangle_node.py 
   DESTINATION lib/${PROJECT_NAME}
 )
 
