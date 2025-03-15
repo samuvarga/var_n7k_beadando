@@ -8,39 +8,43 @@ class SpiderWebNode(Node):
 
     def __init__(self):
         super().__init__('spider_web_node')
-        self.timer = self.create_timer(0.2, self.loop)  # 0.2 másodpercenként
+        self.timer = self.create_timer(0.2, self.loop)  # 0.2 másodpercenkként
         self.cmd_pub = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
+        self.cmd_pub2 = self.create_publisher(Twist, '/turtle2/cmd_vel', 10)
+        self.cmd_pub3 = self.create_publisher(Twist, '/turtle3/cmd_vel', 10)
+        self.cmd_pub4 = self.create_publisher(Twist, '/turtle4/cmd_vel', 10)
         self.loop_count = 0
-        self.radius = 20  # Kezdeti sugár a körökhöz (kisebb)
-        self.get_logger().info("Spider Web Node has been started")
+        self.sides = [40, 60, 80, 100]  # 4 különböző méretű 8szög
+        self.get_logger().info("Spider Web Node with multiple turtles has been started")
 
     def loop(self):
-        cmd_msg = Twist()
-
-        if self.loop_count < 8:  # Kevesebb sugarat rajzolunk
-            cmd_msg.linear.x = 1.0  # Előre mozgás
-            cmd_msg.angular.z = math.radians(45)  # 45 fokos elforgatás
-        elif self.loop_count < 16:  # 8 után rajzolunk egy kört
-            cmd_msg.linear.x = 0.0  # Ne mozduljon előre
-            cmd_msg.angular.z = 0.0  # Ne forgasson
-            self.draw_circle(self.radius)  # Kör rajzolása
-            self.radius += 20  # Növeljük a sugár értékét a következő körhöz
+        # Rajzolás logika minden teknőshöz
+        if self.loop_count == 0:
+            # 4 teknős indítása
+            self.draw_spider_web(self.sides[0], self.cmd_pub)  # Első teknős
+            self.draw_spider_web(self.sides[1], self.cmd_pub2)  # Második teknős
+            self.draw_spider_web(self.sides[2], self.cmd_pub3)  # Harmadik teknős
+            self.draw_spider_web(self.sides[3], self.cmd_pub4)  # Negyedik teknős
+            self.loop_count += 1
         else:
-            cmd_msg.linear.x = 0.0  # Ne mozduljon előre
-            cmd_msg.angular.z = 0.0  # Ne forgasson
-            self.loop_count = 0  # Ciklus visszaállítása
+            self.loop_count += 1
 
-        self.cmd_pub.publish(cmd_msg)
-        self.loop_count += 1
-
-    def draw_circle(self, radius):
-        # Kör rajzolása kisebb lépésekben
-        for _ in range(18):  # 180 fokot rajzolunk 10 fokos lépésekben (kisebb kör)
+    def draw_spider_web(self, size, cmd_pub):
+        """Rajzoljon egy nyolcszöget a megadott méretben."""
+        for _ in range(8):  # 8 oldalas nyolcszög
             cmd_msg = Twist()
-            cmd_msg.linear.x = 1.0  # Előre mozgás
-            cmd_msg.angular.z = math.radians(10)  # 10 fokos elforgatás
-            self.cmd_pub.publish(cmd_msg)
-            time.sleep(0.1)  # Kis szünet, hogy megjelenjen a mozgás
+            cmd_msg.linear.x = 2.0  # Előre mozgás
+            cmd_msg.angular.z = math.radians(45)  # 45 fokos elforgatás
+            cmd_pub.publish(cmd_msg)
+            time.sleep(0.1)
+
+        # Középpontból húzunk vonalakat a sarkokba
+        for i in range(8):  # 8 vonalat rajzolunk
+            cmd_msg = Twist()
+            cmd_msg.linear.x = size  # A méret határozza meg a vonal hosszát
+            cmd_msg.angular.z = math.radians(45)  # Elforgatás a következő sarokba
+            cmd_pub.publish(cmd_msg)
+            time.sleep(0.1)
 
 def main(args=None):
     rclpy.init(args=args)
