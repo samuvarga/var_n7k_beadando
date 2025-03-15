@@ -1,4 +1,3 @@
-#!/usr/bin/env python3.8
 """
 Code for Turtles class
 Author: Shilpaj Bhalerao
@@ -26,10 +25,7 @@ class Turtle:
         self.name = 'turtle' + str(i)
 
     def __repr__(self):
-        return 'Turtle Name: {}'.format(self.name)
-
-    def get_name(self):
-        return self.name
+        print("Turtle {}".format(self.name))
 
     def spawn(self, x, y, theta):
         """
