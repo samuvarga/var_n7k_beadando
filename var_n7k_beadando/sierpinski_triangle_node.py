@@ -73,8 +73,20 @@ class MultipleTurtlesNode(Node):
         move_cmd.angular.z = 2 * math.pi / radius  # Kör mozgás kiszámítása math.pi használatával
         turtle_cmd_pub.publish(move_cmd)
 
-        # Az egyes köröket több iterációval rajzoljuk
-        self.get_logger().info(f'{turtle_name} körét rajzolja most')
+        # A teknős megállítása egy teljes kör megtétele után
+        self.create_timer(2 * math.pi / radius, self.stop_turtle, turtle_name)  # 1 teljes kör megtételéhez szükséges idő
+
+    def stop_turtle(self, turtle_name):
+        """Leállítja a teknőst miután egy teljes kört tett meg"""
+        turtle_cmd_pub = self.create_publisher(Twist, f'/{turtle_name}/cmd_vel', 10)
+
+        # Leállítjuk a teknőst
+        stop_cmd = Twist()
+        stop_cmd.linear.x = 0.0
+        stop_cmd.angular.z = 0.0
+        turtle_cmd_pub.publish(stop_cmd)
+
+        self.get_logger().info(f'{turtle_name} megállt, miután egy teljes kört tett meg.')
 
 def main(args=None):
     rclpy.init(args=args)
