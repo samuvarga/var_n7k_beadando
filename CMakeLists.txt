@@ -1,10 +1,19 @@
 cmake_minimum_required(VERSION 3.5)
-project(sierpinski_triangle)
+project(var_n7k_beadando)
 
 # Függőségek keresése
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(turtlesim REQUIRED)
+
+set(ament_dependencies
+  rclcpp
+  std_msgs
+  geometry_msgs
+  turtlesim
+)
 
 # Include könyvtárak (ha szükséges, hozzáadhatsz további könyvtárakat)
 include_directories(include)
