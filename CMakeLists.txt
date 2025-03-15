@@ -10,7 +10,7 @@ find_package(std_msgs REQUIRED)
 include_directories(include)
 
 # Fordítási cél létrehozása (ha van ilyen)
-add_executable(sierpinski_triangle_node src/sierpinski_triangle_node.cpp)
+add_executable(sierpinski_triangle_node var_n7k_beadando/sierpinski_triangle_node.py)
 
 # Könyvtárak összekapcsolása
 ament_target_dependencies(sierpinski_triangle_node rclcpp std_msgs)
@@ -23,5 +23,5 @@ install(TARGETS
 
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME})
-  
+
 ament_package()
