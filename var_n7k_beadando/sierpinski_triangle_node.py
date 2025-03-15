@@ -1,15 +1,19 @@
 import rclpy
 from rclpy.node import Node
-from turtlesim.srv import Spawn
+from turtlesim.srv import Spawn, Kill
 
 class MultipleTurtlesNode(Node):
     def __init__(self):
         super().__init__('multiple_turtles_node')
 
-        # 4 teknős létrehozása, a középpont (5.544445, 5.544445)-hoz képest 2 egység távolságra
-        self.spawn_turtle(5.544445, 7.544445, 'turtle2')  # Második teknős
-        self.spawn_turtle(5.544445, 9.544445, 'turtle3')  # Harmadik teknős
-        self.spawn_turtle(5.544445, 11.544445, 'turtle4') # Negyedik teknős
+        # Töröljük a már meglévő turtle1-et, amit a turtlesim spawnolt
+        self.kill_turtle('turtle1')  
+
+        # 4 teknős létrehozása
+        self.spawn_turtle(5.0, 5.0, 'turtle2')  # Második teknős
+        self.spawn_turtle(5.0, 6.5, 'turtle3')  # Harmadik teknős
+        self.spawn_turtle(5.0, 8.0, 'turtle4')  # Negyedik teknős
+        self.spawn_turtle(5.0, 9.5, 'turtle5')  # Ötödik teknős
 
     def spawn_turtle(self, x, y, name):
         """Technikai funkció a teknős létrehozására"""
@@ -29,6 +33,21 @@ class MultipleTurtlesNode(Node):
 
         # Szolgáltatás meghívása
         spawn_client.call_async(request)
+
+    def kill_turtle(self, name):
+        """Technikai funkció egy teknős törlésére"""
+        kill_client = self.create_client(Kill, '/kill')
+
+        # Várakozás a szolgáltatás elérhetőségére
+        while not kill_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for kill service...')
+
+        # Szolgáltatás kérés előkészítése
+        request = Kill.Request()
+        request.name = name
+
+        # Szolgáltatás meghívása
+        kill_client.call_async(request)
 
 def main(args=None):
     rclpy.init(args=args)  # ROS2 inicializálás
