@@ -11,7 +11,7 @@ def generate_launch_description():
         ),
         Node(
             package='var_n7k_beadando',
-            executable='sierpinski_triangle_node.py',
+            executable='sierpinski_triangle_node',
             output='screen'
         ),
     ])
