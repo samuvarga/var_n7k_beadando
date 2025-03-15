@@ -39,6 +39,9 @@ class MultipleTurtlesNode(Node):
         # A körök rajzolása külön timer-ben
         self.create_timer(2.0, self.draw_circles)  # 2 másodperc késleltetés, hogy ne blokkolja az egyéb mozgásokat
 
+        # Időzítő létrehozása, hogy 32 másodperc után törölje az összes teknőst
+        self.create_timer(34.0, self.delete_all_turtles)  # 34 másodperc késleltetés (2 másodperc várakozás + 32 másodperc rajzolás)
+
     def spawn_turtle(self, x, y, name):
         """Technikai funkció a teknős létrehozására"""
         spawn_client = self.create_client(Spawn, '/spawn')
@@ -111,6 +114,12 @@ class MultipleTurtlesNode(Node):
 
         # Időzítő létrehozása, hogy folyamatosan küldjön parancsokat
         self.create_timer(0.1, publish_cmd)
+
+    def delete_all_turtles(self):
+        """Törli az összes teknőst"""
+        self.get_logger().info('Töröljük az összes teknőst!')
+        for i in range(3, 12):
+            self.kill_turtle(f'turtle{i}')
 
 def main(args=None):
     rclpy.init(args=args)
