@@ -31,7 +31,7 @@ install(TARGETS
 )
 
 install(PROGRAMS
-  ${CMAKE_CURRENT_SOURCE_DIR}/var_n7k_beadando/sierpinski_triangle_node.py 
+  sierpinski_triangle_node.py 
   DESTINATION lib/${PROJECT_NAME}
 )
 
