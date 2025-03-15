@@ -76,7 +76,7 @@ class MultipleTurtlesNode(Node):
     def turn(self, cmd_pub, angle):
         """A teknős elforgatása a megadott szögben"""
         turn_cmd = Twist()
-        turn_cmd.angular.z = angle  # Elforgatás
+        turn_cmd.angular.z = float(angle)  # Elforgatás float típusra konvertálva
         cmd_pub.publish(turn_cmd)
 
 def main(args=None):
