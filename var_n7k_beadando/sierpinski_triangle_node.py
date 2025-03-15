@@ -17,11 +17,9 @@ class MultipleTurtlesNode(Node):
         self.spawn_turtle(5.0, 8.0, 'turtle4')  # Negyedik teknős
         self.spawn_turtle(5.0, 9.5, 'turtle5')  # Ötödik teknős
 
-        # A körök rajzolása közvetlenül
-        self.draw_circle('turtle2', 1.0)  # Kisebb kör
-        self.draw_circle('turtle3', 1.5)  # Közepes kör
-        self.draw_circle('turtle4', 2.0)  # Nagy kör
-        self.draw_circle('turtle5', 2.5)  # Még nagyobb kör
+        # Megvárjuk, amíg mindegyik teknős spawnolódik, és csak utána kezdünk el köröket rajzolni
+        self.get_logger().info("Várakozás a teknősök spawnolására...")
+        self.create_timer(1.0, self.draw_circles)  # 1 másodperc késleltetés, hogy biztosan elinduljanak
 
     def spawn_turtle(self, x, y, name):
         """Technikai funkció a teknős létrehozására"""
@@ -50,6 +48,16 @@ class MultipleTurtlesNode(Node):
 
         kill_client.call_async(request)
 
+    def draw_circles(self):
+        """Rajzolunk köröket, ha minden teknős spawnolódott"""
+        self.get_logger().info('Most kezdjük el a körök rajzolását!')
+
+        # Körök rajzolása közvetlenül
+        self.draw_circle('turtle2', 1.0)  # Kisebb kör
+        self.draw_circle('turtle3', 1.5)  # Közepes kör
+        self.draw_circle('turtle4', 2.0)  # Nagy kör
+        self.draw_circle('turtle5', 2.5)  # Még nagyobb kör
+
     def draw_circle(self, turtle_name, radius):
         """Rajzolunk egy kört a megfelelő teknőssel"""
         # Kör rajzolása közvetlenül, timer nélkül
@@ -69,20 +77,12 @@ class MultipleTurtlesNode(Node):
         # Az egyes köröket több iterációval rajzoljuk
         self.get_logger().info(f'{turtle_name} körét rajzolja most')
 
-    def move_forward(self, cmd_pub, distance):
-        """A teknős előre mozgatása a megadott távolságra"""
-        move_cmd = Twist()
-        move_cmd.linear.x = distance  # Előre mozgatás
-        cmd_pub.publish(move_cmd)
-
-    def turn(self, cmd_pub, angle):
-        """A teknős elforgatása a megadott szögben"""
-        turn_cmd = Twist()
-        turn_cmd.angular.z = float(angle)  # Elforgatás float típusra konvertálva
-        cmd_pub.publish(turn_cmd)
-
 def main(args=None):
     rclpy.init(args=args)
     multiple_turtles_node = MultipleTurtlesNode()
     rclpy.spin(multiple_turtles_node)
-    multiple_turt
+    multiple_turtles_node.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
