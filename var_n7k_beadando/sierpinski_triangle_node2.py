@@ -9,7 +9,7 @@ import time
 class SierpinskiTriangleNode(Node):
 
     def __init__(self):
-        super().__init__('sierpinski_triangle_node')
+        super().__init__('archery_target_node')
         
         # Készítünk egy publisher-t a turtle mozgásának vezérlésére
         self.cmd_pub = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
@@ -20,9 +20,9 @@ class SierpinskiTriangleNode(Node):
             self.get_logger().info('A szolgáltatás nem elérhető, próbálkozom újra...')
 
         # A háromszög rajzolása
-        self.draw_sierpinski_triangle()
+        self.draw_archery_target()
 
-    def draw_sierpinski_triangle(self):
+    def draw_archery_target(self):
         # Háromszög csúcsai
         points = [(2, 2), (8, 8), (2, 8)]
 
