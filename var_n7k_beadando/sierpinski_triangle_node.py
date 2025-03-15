@@ -15,11 +15,23 @@ class MultipleTurtlesNode(Node):
         self.spawn_turtle(5.0, 6.5, 'turtle3')  # Harmadik teknős
         self.spawn_turtle(5.0, 8.0, 'turtle4')  # Negyedik teknős
         self.spawn_turtle(5.0, 9.5, 'turtle5')  # Ötödik teknős
+        self.spawn_turtle(5.0, 5.5, 'turtle6')  # Harmadik teknős
+        self.spawn_turtle(5.0, 6.0, 'turtle7')  # Negyedik teknős
+        self.spawn_turtle(5.0, 7.0, 'turtle8')  # Ötödik teknős
+        self.spawn_turtle(5.0, 7.5, 'turtle9')  # Harmadik teknős
+        self.spawn_turtle(5.0, 8.5, 'turtle10')  # Negyedik teknős
+        self.spawn_turtle(5.0, 9.0, 'turtle11')  # Ötödik teknős
 
         # Szín és egyéb tulajdonságok beállítása
         self.set_turtle_appearance('turtle3')
         self.set_turtle_appearance('turtle4')
         self.set_turtle_appearance('turtle5')
+        self.set_turtle_appearance('turtle6')
+        self.set_turtle_appearance('turtle7')
+        self.set_turtle_appearance('turtle8')
+        self.set_turtle_appearance('turtle9')
+        self.set_turtle_appearance('turtle10')
+        self.set_turtle_appearance('turtle11')
 
         # Megvárjuk, amíg mindegyik teknős spawnolódik, és csak utána kezdünk el köröket rajzolni
         self.get_logger().info("Várakozás a teknősök spawnolására...")
@@ -62,7 +74,7 @@ class MultipleTurtlesNode(Node):
             self.get_logger().info(f'Waiting for {turtle_name} set_pen service...')
 
         request = SetPen.Request()
-        request.r = 0  # Piros szín
+        request.r = 255  # Piros szín
         request.g = 0    # Zöld szín
         request.b = 0    # Kék szín
         request.width = 2  # Vonalvastagság
@@ -78,6 +90,13 @@ class MultipleTurtlesNode(Node):
         self.move_in_circle('turtle3', 1.5)
         self.move_in_circle('turtle4', 3.0)
         self.move_in_circle('turtle5', 4.5)
+        self.move_in_circle('turtle6', 0.5)
+        self.move_in_circle('turtle7', 1.0)
+        self.move_in_circle('turtle8', 2.0)
+        self.move_in_circle('turtle9', 2.5)
+        self.move_in_circle('turtle10', 3.5)
+        self.move_in_circle('turtle11', 4.0)
+        
 
     def move_in_circle(self, turtle_name, radius):
         """A kör rajzolása a teknőssel"""
