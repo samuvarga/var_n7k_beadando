@@ -39,7 +39,7 @@ ros2 launch var_n7k_beadando archery_target_launch.py
 
 ### Archery Target Visualization
 
-![Archery Target Visualization](img/ezgif.com-optimize.gif)
+![Archery Target Visualization](img/archery_target.gif)
 
 ### Graph
 
