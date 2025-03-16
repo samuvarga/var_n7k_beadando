@@ -51,17 +51,6 @@ In the turtlesim application, the turtle textures had to be modified because the
 
 To solve this issue, I replaced the galactic and rolling turtle textures with the ardent texture, which has the correct size, ensuring accurate drawing.
 
-<div style="display: flex; justify-content: space-around;">
-    <div style="text-align: center;">
-        <img src="img/galactic.png" alt="Image 1" width="150" height="150"/>
-        <h5>Galactic</h5>
-    </div>
-    <div style="text-align: center;">
-        <img src="img/rolling.png" alt="Image 2" width="150" height="150"/>
-        <h5>Rolling</h5>
-    </div>
-    <div style="text-align: center;">
-        <img src="img/ardent.png" alt="Image 3" width="150" height="150"/>
-        <h5>Ardent</h5>
-    </div>
-</div>
+| ![Galactic](img/galactic.png) | ![Rolling](img/rolling.png) | ![Ardent](img/ardent.png) |
+|:-----------------------------:|:---------------------------:|:-------------------------:|
+| Galactic                      | Rolling                     | Ardent                    |
