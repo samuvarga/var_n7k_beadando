@@ -1,5 +1,9 @@
 # `var_n7k_beadando` package
 ROS 2 python package.  [![Static Badge](https://img.shields.io/badge/ROS_2-Humble-34aec5)](https://docs.ros.org/en/humble/)
+
+A package egy node-ból áll, amely a turtlesim szimulátorban képes egy céltábla kirajzolására. Megvalósítás ROS 2 Humble alatt.
+
+This package consists of one node. The aim of the node is to draw an archery target in the turtlesim simulator. This package builds in ROS 2 Humble.
 ## Packages and build
 
 It is assumed that the workspace is `~/ros2_ws/`.
@@ -38,6 +42,8 @@ ros2 launch var_n7k_beadando archery_target_launch.py
 ![Archery Target Visualization](img/ezgif.com-optimize.gif)
 
 ### Graph
+
+The `/multiple_turtles_node` node publishes multiple `/turtleX/cmd_vel` topics , where `X` ranges from 3 to 11. The simulator node (`/sim`) subscribes to these command topics.
 
 ![Graph](img/graph.png)
 
