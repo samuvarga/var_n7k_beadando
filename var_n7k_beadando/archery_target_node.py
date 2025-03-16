@@ -12,7 +12,7 @@ class MultipleTurtlesNode(Node):
         self.kill_turtle('turtle1')
 
         # 9 teknős létrehozása különböző pontokban
-        self.spawn_turtle(5.0, 6.5, 'turtle3')  # Harmadik teknőss
+        self.spawn_turtle(5.0, 6.5, 'turtle3')  # Harmadik teknős
         self.spawn_turtle(5.0, 8.0, 'turtle4')  # Negyedik teknős
         self.spawn_turtle(5.0, 9.5, 'turtle5')  # Ötödik teknős
         self.spawn_turtle(5.0, 5.5, 'turtle6')  # Hatodik teknős
@@ -52,7 +52,7 @@ class MultipleTurtlesNode(Node):
         request = Spawn.Request()
         request.x = x
         request.y = y
-        request.theta = 0.0  # Nem forgatjuk el a teknőst, tehát jobbra néz
+        request.theta = 0.0 
         request.name = name
 
         spawn_client.call_async(request)
@@ -77,11 +77,11 @@ class MultipleTurtlesNode(Node):
             self.get_logger().info(f'Waiting for {turtle_name} set_pen service...')
 
         request = SetPen.Request()
-        request.r = r  # Piros szín
-        request.g = g  # Zöld szín
-        request.b = b  # Kék szín
-        request.width = 23  # Vonalvastagság
-        request.off = False  # Rajzolás engedélyezése
+        request.r = r  
+        request.g = g  
+        request.b = b  
+        request.width = 23  
+        request.off = False  
 
         set_pen_client.call_async(request)
 
@@ -89,7 +89,7 @@ class MultipleTurtlesNode(Node):
         """Rajzolunk köröket a többi teknőssel"""
         self.get_logger().info('Most kezdjük el a körök rajzolását!')
 
-        # turtle3, turtle4 és turtle5 köröket rajzolnak
+        # Körök rajzolása a különböző teknősökkel
         self.move_in_circle('turtle3', 1.5)
         self.move_in_circle('turtle4', 3.0)
         self.move_in_circle('turtle5', 4.5)
@@ -104,7 +104,6 @@ class MultipleTurtlesNode(Node):
         """A kör rajzolása a teknőssel"""
         turtle_cmd_pub = self.create_publisher(Twist, f'/{turtle_name}/cmd_vel', 10)
 
-        # Az angular sebességet úgy kell beállítani, hogy a teknős jobbra forogjon
         move_cmd = Twist()
         move_cmd.linear.x = 1.0  # Állandó sebesség, hogy körben mozogjanak
         move_cmd.angular.z = -1.0 * (1.0 / radius)  # A negatív angular sebesség biztosítja a jobbra forgást
